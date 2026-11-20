@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>电力营销 AI 文献库</title>
+<style>
+:root{color-scheme:light;--ink:#162c27;--muted:#50645e;--paper:#f4f5ef;--line:#d8e0d7;--green:#145b49}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}a{color:var(--green)}header{background:#142e27;color:#fff;padding:40px 0 48px;border-bottom:5px solid #b8d898}.wrap{width:min(1080px,calc(100% - 40px));margin:auto}.mast{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:14px;color:#d4e6da}.mast a{color:inherit}h1{font-size:clamp(34px,6vw,64px);line-height:1.15;margin:40px 0 12px;letter-spacing:-.04em}header p{color:#d4e6da;margin:0;max-width:660px}main{padding:28px 0 60px}.controls{display:grid;grid-template-columns:1fr 140px;gap:12px}input,select,button{font:inherit;color:inherit;background:#fff;border:1px solid #aebeb1;border-radius:9px;padding:10px 14px;min-width:0}nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 22px}button{cursor:pointer;padding:6px 12px}button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}:focus-visible{outline:3px solid #55823b;outline-offset:3px}.heading{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);margin-bottom:16px}h2{font-size:22px;margin:0 0 8px}#count,.meta,footer{color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}article{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:flex-start}article h3{line-height:1.4;font-size:19px;margin:9px 0;overflow-wrap:anywhere}article p{margin:6px 0 14px}article a{margin-top:auto;font-weight:650}.topic{background:#e8f0e3;border-radius:5px;padding:1px 8px;color:#245742}footer{margin-top:30px}@media(max-width:650px){.grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr 108px}header{padding-top:24px}h1{margin-top:27px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="mast"><span>电力营销研究</span><a href="https://app.undermind.ai/projects/1519ca43-38f7-4306-b2b4-2812b3f60820">Undermind 工作区 ↗</a></div><h1>电力营销 AI 文献库</h1><p>按业务场景浏览 2025–2026 年的研究，比较论文用什么方法、解决什么问题，以及提供了哪些验证。</p></div></header>
+<main class="wrap">
+<div class="controls"><input type="search" id="query" aria-label="搜索论文" placeholder="搜索题名、作者、方法或业务关键词"><select id="year" aria-label="筛选年份"><option value="">全部年份</option><option>2026</option><option>2025</option></select></div>
+<nav id="topics" aria-label="按业务领域筛选"></nav>
+<div class="heading"><h2 id="section">全部论文</h2><span id="count" role="status"></span></div>
+<div class="grid" id="papers"></div>
+<footer>条目基于此前核实的论文摘要、出版信息及可访问全文。示例效果以论文报告为准。</footer>
+</main>
+<script>
+const papers = [
+  ['营销稽查',2026,'Mao 等 · Electric Power Systems Research','Prompt-Power: A large language model-guided automated compliance auditing framework for power data','用结构化提示与知识图谱辅助合规审计，在 PJM 市场数据和 UCI 居民用电数据上验证。','10.1016/j.epsr.2026.113177'],
+  ['营销稽查',2025,'Li 等 · Frontiers in Physics','Abnormality detection and privacy protection strategies for power marketing inspection business of cyber–physical–social systems using big data and artificial intelligence','关联故障处理与退费工单，定位故障区间，估算电量，并用 RNN/LSTM 识别异常业务。','10.3389/fphy.2025.1594819'],
+  ['营销稽查',2025,'Chen 等 · IEEE AECSE','Research on Intelligent Auditing and Behavior Tracking Mechanism for Power Data Based on Graphical Scene Modeling','用动态图卷积识别异常，并追踪用户、设备与用电行为之间的关联。','10.1109/AECSE67874.2025.11383668'],
+  ['营销稽查',2026,'Orozco-Cerón 等 · Technologies','Comparing Machine and Deep Learning for Electricity Theft Detection from Monthly Billing Data in an Emerging Energy Market','用月度账单和现场核实标签比较八种窃电筛查模型，随机森林的 AUC 为 0.748。','10.3390/technologies14090568'],
+  ['营销稽查',2026,'Geng、Jia · 工程与管理科学','大数据技术在电费异常监测与用电检查中的应用','讨论多源数据整合、异常识别、用电检查处置与闭环优化。','10.32629/ems.v8i5.20189'],
+  ['业扩报装',2025,'Ji 等 · Journal of Electrical and Computer Engineering','Available Capacity Analysis and Business Expansion Decision Method Based on Distribution Network Edge Agent','结合拓扑遍历、时序容量计算与多目标优化，为新装增容选择馈线分区和台区。','10.1155/jece/8862201'],
+  ['业扩报装',2025,'当代水电科技','业扩报装智能化管理模式创新研究','讨论 GIS 辅助勘查、智能客服和供电方案自动生成。案例的样本规模与评估方法披露有限。','10.69979/3060-8767.25.04.049'],
+  ['业扩报装',2026,'Jia · 工程与管理科学','RPA技术在电力业扩报装流程管理中的应用','讨论用机器人流程自动化处理重复操作、数据流转和跨系统交互。','10.32629/ems.v8i2.18453'],
+  ['业扩报装',2025,'Zhang、Wu · 城市建筑与发展','供电企业高压客户业扩报装流程的优化研究','介绍高压客户报装现状与优化对策，可用于了解业务流程。','10.37155/2717-557x-0621-59'],
+  ['客户画像与分群',2026,'Stenstadvolden 等 · IEEE I&CPS','Behavior-Driven Latent Clustering of Residential Power Consumers Using Real-World Utility Smart Meter Data','用真实电表数据，通过 SVD 降维和 K-means 提取居民客户典型负荷曲线。','10.1109/ICPS67768.2026.11713006'],
+  ['客户画像与分群',2026,'Lin 等 · 電腦學刊','EleMoE: An Unsupervised User Profiling Framework for Electricity Consumption Behavior','用混合专家模型重建用电时序、学习特征，再用 K-means 分群。','10.63367/199115992026083704009'],
+  ['客户画像与分群',2026,'Nasrollahi 等 · Energy Reports','Revealing flexibility: A cluster-based, data-driven model for unveiling electricity consumption adaptability in households','从相似历史用电行为提取移峰情景，比较削峰潜力、费用和行为偏离程度。','10.1016/j.egyr.2026.109477'],
+  ['客户画像与分群',2025,'Kudarihal 等 · International Research Journal of Multidisciplinary Scope','Demand Response Targeting via Load Cluster Analysis','对家庭负荷曲线聚类，并评估各群体与分时电价、直接负荷控制等策略的适配性。','10.47857/irjms.2025.v06i02.03635'],
+  ['智能客服',2025,'Wang 等 · arXiv 预印本','ElectriQ: A Benchmark for Assessing the Response Capability of Large Language Models in Power Marketing','以 95598 等业务为背景，构建六类电力客服对话评测，并比较 13 个大模型。','10.48550/arXiv.2507.22911'],
+  ['电价与需求响应',2026,'Wang 等 · Applied Sciences','Development of a Hierarchical Reinforcement Learning Model for Dynamic Retail Pricing and Cooling Demand Response in Building Communities','用分层强化学习联动动态零售电价、储能和楼宇制冷，在六栋楼的仿真中比较聚合商利润与用户成本。','10.3390/app16189327'],
+  ['电价与需求响应',2025,'Chen 等 · IEEE Transactions on Network Science and Engineering','Reinforcement Learning-Based Time of Use Pricing Design Toward Distributed Energy Integration in Low Carbon Power System','用深度强化学习设计峰、平、谷电价，并考虑用户行为与分布式能源投资。','10.1109/TNSE.2024.3521929']
+];
+const query = document.querySelector('#query');
+const year = document.querySelector('#year');
+const topics = document.querySelector('#topics');
+const results = document.querySelector('#papers');
+let activeTopic = '';
+function element(tag, value, className) {
+  const node = document.createElement(tag);
+  node.textContent = value;
+  if (className) node.className = className;
+  return node;
+}
+for (const topic of ['', ...new Set(papers.map(paper => paper[0]))]) {
+  const button = element('button', topic || '全部');
+  button.dataset.topic = topic;
+  button.addEventListener('click', () => { activeTopic = topic; render(); });
+  topics.append(button);
+}
+function render() {
+  const terms = query.value.trim().toLowerCase().split(/\s+/);
+  const matches = papers.filter(paper =>
+    (!activeTopic || paper[0] === activeTopic) &&
+    (!year.value || String(paper[1]) === year.value) &&
+    terms.every(term => paper.join(' ').toLowerCase().includes(term))
+  );
+  for (const button of topics.children) button.setAttribute('aria-pressed', String(button.dataset.topic === activeTopic));
+  document.querySelector('#section').textContent = activeTopic || '全部论文';
+  document.querySelector('#count').textContent = `${matches.length} 篇论文`;
+  results.replaceChildren();
+  if (!matches.length) results.append(element('p', '没有匹配的论文。可以更换关键词或调整筛选条件。'));
+  for (const [topic, date, venue, title, summary, doi] of matches) {
+    const card = element('article', '');
+    const link = element('a', '查看 DOI ↗');
+    link.href = `https://doi.org/${doi}`;
+    link.setAttribute('aria-label', `查看论文：${title}`);
+    card.append(element('span', topic, 'topic'), element('h3', title), element('div', `${date} · ${venue}`, 'meta'), element('p', summary), link);
+    results.append(card);
+  }
+}
+query.addEventListener('input', render);
+year.addEventListener('change', render);
+render();
+</script>
+</body>
+</html>
+
